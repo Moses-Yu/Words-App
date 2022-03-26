@@ -1,23 +1,19 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+
+  let word = ["apple", "watermelon"];
+  let discription = ["사과", "수박"];
+  let [words, edit] = useState(word, "edit");
+  let [disc, edit1] = useState(discription, "edit");
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='list'>
+        <div>{ words[0] }</div>
+        <div>{ disc[0] }</div>
+      </div>
     </div>
   );
 }
