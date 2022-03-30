@@ -1,0 +1,49 @@
+body {
+    /* center */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    /* size */
+    width: 800px;
+    height: 800px;
+    /* color */
+    background-color: rgb(0, 0, 0);
+    border: 2px solid;
+    border-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+.loginbox {
+    /* center */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    /* size */
+    width: 300px;
+    height: 300px;
+    /* color */
+    background-color: rgb(0, 0, 0);
+    border: 2px solid;
+    border-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+form {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: rgb(255, 255, 255);
+}
+
+.btn {
+    margin: 10px 4px;
+}
+
+.btn>input {
+    color: aqua;
+    background-color: black;
+    width: 100px;
+}
