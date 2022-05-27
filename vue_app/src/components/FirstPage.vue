@@ -1,6 +1,7 @@
 <template>
-  <search-tab/>
+  <search-tab v-on:/>
   <definition-box/>
+  
 </template>
 
 <script>

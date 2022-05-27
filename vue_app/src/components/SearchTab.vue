@@ -20,7 +20,7 @@ export default {
     search() {
       console.log(this.searchText);
       this.axios
-        .get("http://localhost:3000/dummy/" + this.searchText)
+        .get("http://localhost:3000/word/" + this.searchText)
         .then((response) => {
           console.log(response.data.result);
         //   this.searchText = "";

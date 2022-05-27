@@ -1,5 +1,9 @@
 <template>
-  <div class="def" style="width: 80%; height: auto; left: 50%; bottom: 0; top: 20%">
+  <div
+    class="def"
+    style="width: 80%; height: auto; left: 50%; bottom: 0; top: 20%"
+  >
+    <div @result-from-searchTab ="asdf" />
     <div class="info">
       <div class="word">
         <div class="word_name">apple</div>
@@ -115,7 +119,19 @@ export default {
     return {
       speakerImage0: speakerImage0,
       speakerImage1: speakerImage1,
+      wordObj: {},
+      word: "",
+      shortMeaning: [],
+      pron: "",
+      types: "",
+      longMeaning: [],
     };
+  },
+  methods: {
+    saveWord: function(value) {
+      this.wordObj = value;
+      
+    }
   },
 };
 </script>
