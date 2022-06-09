@@ -180,3 +180,7 @@ exports.deleteTodo = async function (req, res) {
     message: "삭제 성공",
   });
 };
+
+exports.sendFile = async function(req, res, next) {
+  res.sendFile(path.join(__dirname, './public', 'index.html'));
+}
