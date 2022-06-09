@@ -24,5 +24,5 @@ exports.indexRouter = function (app) {
   //   }
   // );
 
-  app.get("/dummy/:word", indexController.dummy)
+  app.get("/word/:word", indexController.word)
 };
