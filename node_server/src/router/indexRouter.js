@@ -7,7 +7,9 @@ exports.indexRouter = function (app) {
   app.get("/todos", jwtMiddleware, indexController.readTodo); // read
   app.patch("/todo", jwtMiddleware, indexController.updateTodo); // update
   app.delete("/todo/:todoIdx", jwtMiddleware, indexController.deleteTodo); // delete
+  app.get('/', jwtMiddleware, indexController.sendFile); // get vue build
 
+  
   // app.get(
   //   "/dummy",
   //   function (req, res, next) {

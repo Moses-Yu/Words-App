@@ -7,6 +7,8 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
+
+
 /* express 미들웨어 설정 */
 
 // cors 설정
@@ -24,3 +26,4 @@ indexRouter(app);
 app.listen(port, () => {
   console.log(`Express app listening at port: ${port}`);
 });
+

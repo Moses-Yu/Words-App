@@ -1,5 +1,5 @@
 <template>
-  <search-tab v-on:/>
+  <search-tab/>
   <definition-box/>
   
 </template>
