@@ -1,5 +1,6 @@
 const indexController = require("../controller/indexController");
 const { jwtMiddleware } = require("../../jwtMiddleware");
+const path = require("path")
 
 exports.indexRouter = function (app) {
   // 일정 CRUD API
@@ -7,9 +8,8 @@ exports.indexRouter = function (app) {
   app.get("/todos", jwtMiddleware, indexController.readTodo); // read
   app.patch("/todo", jwtMiddleware, indexController.updateTodo); // update
   app.delete("/todo/:todoIdx", jwtMiddleware, indexController.deleteTodo); // delete
-  app.get('/', jwtMiddleware, indexController.sendFile); // get vue build
+  // app.get('/', indexController.sendFile); // get vue build
 
-  
   // app.get(
   //   "/dummy",
   //   function (req, res, next) {

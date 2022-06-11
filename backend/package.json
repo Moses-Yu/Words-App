@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "0.0.0",
+  "description": "sample project for node and vue",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Moses-Yu/node-and-vue.git"
+  },
+  "keywords": [
+    "node",
+    "vue"
+  ],
+  "author": "Moses",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Moses-Yu/node-and-vue/issues"
+  },
+  "homepage": "https://github.com/Moses-Yu/node-and-vue#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.11",
+    "express": "^4.18.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.16",
+    "path": "^0.12.7"
+  }
+}

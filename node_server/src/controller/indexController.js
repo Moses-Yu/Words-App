@@ -1,8 +1,9 @@
 const { param } = require("express/lib/request");
 const indexDao = require("../dao/indexDao");
+const path = require("path");
 
 exports.word = async (req, res) => {
-  const word = req.params.word;
+  const { word } = req.params.word;
   console.log(word);
   const searchWord = await indexDao.searchWord(word);
 
@@ -182,5 +183,5 @@ exports.deleteTodo = async function (req, res) {
 };
 
 exports.sendFile = async function(req, res, next) {
-  res.sendFile(path.join(__dirname, './public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../public', 'index.html'));
 }
