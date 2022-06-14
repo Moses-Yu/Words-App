@@ -2,7 +2,7 @@ const { param } = require("express/lib/request");
 const indexDao = require("../dao/indexDao");
 const path = require("path");
 
-exports.word = async (req, res) => {
+exports.word = async function(req, res) {
   const { word } = req.params.word;
   console.log(word);
   const searchWord = await indexDao.searchWord(word);

@@ -1,12 +1,13 @@
 <template>
   <div v-bind:class="{search_tab_top : result != '', search_tab_center : result == ''}" style="">
     <input v-model="searchText" class="search_input" type="text" />
-    <button class="search_submit" type="submit" @click="search">
+    <button class="search_submit" type="button" @click="search">
       <img src="../assets/search_icon.png" />
     </button>
   </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   name: "SearchTab",
   data() {
@@ -19,11 +20,11 @@ export default {
   methods: {
     search() {
       console.log(this.searchText);
-      this.axios
-        .get("http://localhost:3000/word/" + this.searchText)
+      axios
+        .get("/server/word/" + this.searchText)
         .then((response) => {
           console.log(response.data.result);
-        //   this.searchText = "";
+        //this.searchText = "";
           this.$root.$emit("result-from-searchTab", response.data.result)
         })
         .catch((error) => console.log(error));

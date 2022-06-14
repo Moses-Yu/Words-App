@@ -3,7 +3,7 @@
     class="def"
     style="width: 80%; height: auto; left: 50%; bottom: 0; top: 20%"
   >
-    <div @result-from-searchTab ="asdf" />
+    <div @result-from-searchTab ="saveWord" />
     <div class="info">
       <div class="word">
         <div class="word_name">apple</div>
@@ -130,7 +130,7 @@ export default {
   methods: {
     saveWord: function(value) {
       this.wordObj = value;
-      
+      console.log(this.wordObj);
     }
   },
 };

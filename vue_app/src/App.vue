@@ -1,5 +1,5 @@
 <template>
-  <first-page v-show="login" />
+  <first-page/>
   <nav-bar />
 </template>
 
@@ -15,6 +15,7 @@ export default {
   data() {
     return {
       login: true,
+      
     };
   },
 };

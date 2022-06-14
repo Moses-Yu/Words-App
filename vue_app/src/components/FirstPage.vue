@@ -1,6 +1,6 @@
 <template>
-  <search-tab/>
-  <definition-box/>
+  <search-tab v-on:result-from-searchTab="searchData = value"/>
+  <definition-box v-show="searchData.word"/>
   
 </template>
 
@@ -12,7 +12,12 @@ export default {
   name: 'FirstPage',
   components: {
     SearchTab, DefinitionBox
-  }
+  },
+  data() {
+    return {
+      searchData: {},
+    }
+  },
 }
 </script>
 
