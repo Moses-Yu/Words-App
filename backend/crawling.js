@@ -1356,6 +1356,6 @@ const run = async () => {
   console.log(words);
 };
 
-run();
+// run();
 
 // searchAndAddWord("apple");

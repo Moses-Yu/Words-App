@@ -1,7 +1,7 @@
 var path = require("path");
-const target = "http://localhost:3000";
+const target = "http://localhost:3001";
 module.exports = {
-  outputDir: path.resolve("../node_server/public"),
+  outputDir: path.resolve("../backend/public"),
   transpileDependencies: true,
   devServer: {
     proxy: {

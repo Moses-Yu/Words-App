@@ -1,16 +1,18 @@
 <template>
-  <first-page/>
+  <!-- <first-page/> -->
   <nav-bar />
+  <router-view />
 </template>
 
 <script>
-import FirstPage from "./components/FirstPage.vue";
+// import FirstPage from "./components/FirstPage.vue";
 import NavBar from "./components/NavBar.vue";
 
 export default {
   name: "App",
   components: {
-    FirstPage,NavBar
+    // FirstPage, 
+    NavBar
   },
   data() {
     return {

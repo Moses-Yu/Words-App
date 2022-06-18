@@ -6,6 +6,7 @@
     </button>
   </div>
 </template>
+
 <script>
 import axios from 'axios'
 export default {
@@ -23,7 +24,7 @@ export default {
       axios
         .get("/server/word/" + this.searchText)
         .then((response) => {
-          console.log(response.data.result);
+          console.log(response.data.word);
         //this.searchText = "";
           this.$root.$emit("result-from-searchTab", response.data.result)
         })

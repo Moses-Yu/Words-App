@@ -1,7 +1,6 @@
 <template>
   <search-tab v-on:result-from-searchTab="searchData = value"/>
   <definition-box v-show="searchData.word"/>
-  
 </template>
 
 <script>
