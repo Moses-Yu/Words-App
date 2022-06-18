@@ -14,6 +14,11 @@
       padding: 0;
       font-family: "Nanum Gothic", sans-serif;
       color: #252525;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    body::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera*/
     }
     .crop {
       position: absolute;
@@ -27,8 +32,8 @@
       top: 50%;
       transform: translate(-50%, -50%);
       position: absolute;
-      width: auto;
-      height: 100%;
+      width: 100%;
+      height: auto;
       /* overflow: hidden; */
     }
   </style>

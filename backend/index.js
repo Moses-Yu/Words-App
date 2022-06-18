@@ -3,9 +3,11 @@ const cors = require("cors");
 const app = express();
 const port = 3001;
 
-const crawling = require("./crawling");
+const controller = require("./controller");
 
 app.use(express.static("public"));
+// body json 파싱
+app.use(express.json());
 
 // cors 설정
 app.use(cors());
@@ -15,13 +17,9 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../public", "index.html"));
 });
 
-app.get("/server/word/:word", (req, res) => {
-  const { word } = req.params.word;
-  console.log(word);
-  res.send({
-    word: "apple is yammi"
-  });
-});
+app.post("/server/login", controller.login);
+
+app.get("/server/word/:word", controller.searchWord);
 
 
 app.listen(port, () => {

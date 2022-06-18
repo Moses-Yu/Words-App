@@ -1,5 +1,9 @@
 alter table words ADD sound_url nvarchar(1000) null;
 
+ALTER TABLE words ADD COLUMN meaning_deep_kr VARCHAR(1000) AFTER meaning_deep;
+
+ALTER TABLE words DROP meaning_deep_kr;
+
 SELECT * FROM words;
 
 select * from words where word = "resume";

@@ -1,109 +1,39 @@
 <template>
-  <div
-    class="def"
-    style="width: 80%; height: auto; left: 50%; bottom: 0; top: 20%"
-  >
-    <div @result-from-searchTab ="saveWord" />
-    <div class="info">
+  <div class="def def_anim" style="">
+    <div class="add_word" v-if="word.word">
+      <div></div>
+      <div></div>
+    </div>
+    <div class="info" v-if="word.word">
       <div class="word">
-        <div class="word_name">apple</div>
+        <div class="word_name">{{ word.word }}</div>
         <div class="word_defi">
-          <div>1. 애플</div>
-          <div>2. 사과</div>
-          <div>3. 사과나무</div>
-          <div>4. 뉴욕</div>
+          <div>{{ word.meaning }}</div>
         </div>
         <div class="pron">
-          <div>[ǽpl]</div>
-          <div class="sound">
+          <div>{{ word.pron }}</div>
+          <div class="sound" @click="play(word.sound_url)">
+            <audio :id="word.sound_url" :src="word.sound_url"></audio>
             <img src="../assets/speaker_icon1.png" />
           </div>
         </div>
       </div>
-      <div class="add_word">
-        <div></div>
-        <div></div>
-      </div>
     </div>
+    <div class="err" v-else>Can not search word</div>
+    <div class="etcs" v-if="word.word">
+      <div class="etc">
+        <div class="etc_title">예문</div>
 
-    <div class="defi">
-      <div class="defi_type">
-        <div>명사</div>
-        <div>
-          1. 사과와 속(屬)은 같고 종이 다른 과실
+        <div class="etc_main" v-for="index in word.md.length-2" :key="index">
           <div>
-            a crab apple
+            <span>{{ word.md[index] }}</span>
             <span class="sound_icon"
               ><img src="../assets/speaker_icon1.png"
             /></span>
           </div>
-          <div>야생 능금.</div>
+          <div>{{ word.mdk[index] }}</div>
+          <!-- <div>Merriam-Webster's Learner's Dictionary</div> -->
         </div>
-        <div>
-          2. 사과, 사과나무
-          <div>
-            a red-cheeked[a green, a sour] apple
-            <span class="sound_icon"
-              ><img src="../assets/speaker_icon1.png"
-            /></span>
-          </div>
-          <div>빨간[덜 익은, 신] 사과</div>
-        </div>
-        <div>
-          3. 사과 비슷한 과일: custard apple, oak apple, thorn apple, May apple
-          등.
-        </div>
-        <div>4. (모양· 크기· 빛깔 등이) 사과 모양의 것; (비격식) 야구공.</div>
-        <div>
-          5. (보통 형용사와 함께) (미·속어) 녀석(fellow)
-          <div>
-            a sad apple
-            <span class="sound_icon"
-              ><img src="../assets/speaker_icon1.png"
-            /></span>
-          </div>
-          <div>싫은[천박스러운] 놈</div>
-        </div>
-        <div>6. (속어) 번화가, 대도시.</div>
-        <div>7. (미·속어) (신경 안정제가 든) 붉은 캡슐.</div>
-      </div>
-    </div>
-
-    <div class="etc">
-      <div class="etc_title">예문</div>
-      <div class="etc_main">
-        <div>
-          <span>He ate the apple, stalk and all.</span>
-          <span class="sound_icon"
-            ><img src="../assets/speaker_icon1.png"
-          /></span>
-        </div>
-        <div>그는 그 사과를 속심까지 다 먹었다.</div>
-        <div>Merriam-Webster's Learner's Dictionary</div>
-      </div>
-
-      <div class="etc_main">
-        <div>
-          <span> Who could argue against mother hood and apple pie? </span>
-          <span class="sound_icon"
-            ><img src="../assets/speaker_icon1.png"
-          /></span>
-        </div>
-        <div>
-          모성과 안락한 가정에 반롤을 제기할 수 있는 사람이 누가 있겠는가?
-        </div>
-        <div>Merriam-Webster's Learner's Dictionary</div>
-      </div>
-
-      <div class="etc_main">
-        <div>
-          <span> apple is the same thing as this floppy disk. </span>
-          <span class="sound_icon"
-            ><img src="../assets/speaker_icon1.png"
-          /></span>
-        </div>
-        <div>이 사과는 플로피 디스크와 같아요.</div>
-        <div>TED</div>
       </div>
     </div>
   </div>
@@ -115,23 +45,40 @@ import speakerImage1 from "../assets/speaker_icon1.png";
 
 export default {
   name: "DefinitionBox",
+  props: {
+    wordObject: { type: Object },
+  },
   data: function () {
     return {
       speakerImage0: speakerImage0,
       speakerImage1: speakerImage1,
-      wordObj: {},
-      word: "",
-      shortMeaning: [],
-      pron: "",
-      types: "",
-      longMeaning: [],
     };
   },
   methods: {
-    saveWord: function(value) {
-      this.wordObj = value;
-      console.log(this.wordObj);
-    }
+    play(id) {
+      let i = document.getElementById(id);
+      i.play();
+    },
+  },
+  computed: {
+    word: function () {
+      let temp = this.wordObject;
+      if (temp.word) {
+        let s = temp.meaning_deep;
+        let md = s.split("@@@");
+        s = temp.meaning_deep_kr;
+        let mdk = s.split("@@@");
+        temp.md = md;
+        temp.mdk = mdk;
+      }
+      console.log(temp, "word");
+      return temp;
+    },
+    etc: function () {
+      let list = [];
+      // this.wordObject.etc
+      return list;
+    },
   },
 };
 </script>
@@ -147,6 +94,22 @@ export default {
   overflow-y: scroll;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  width: 80%;
+  height: auto;
+  left: 50%;
+  bottom: 0;
+  top: 20%;
+}
+@keyframes slideUpFromBottom {
+  0% {
+    transform: translate(-50%, 100%);
+  }
+  100% {
+    transform: translate(-50%, 0%);
+  }
+}
+.def_anim {
+  animation: 2s ease-out 0s 1 slideUpFromBottom;
 }
 
 .def::-webkit-scrollbar {
@@ -154,25 +117,35 @@ export default {
 }
 
 .info {
-  position: inherit;
+  position: relative;
   background-color: #c8c8c8;
-  left: 5%;
-  right: 35%;
-  top: 5%;
-  height: 200px;
-  border-radius: 100px;
+  margin-left: 5%;
+  /* margin-right: 5%; */
+  margin-top: 50px;
+  margin-bottom: 20px;
+  width: 90%;
+  /* height: 200px; */
+  border-radius: 50px;
 }
 
+.err {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+}
 .word {
-  position: relative;
+  /* position: relative; */
   top: 20px;
   font-size: 50px;
-  width: 100%;
+  width: 70%;
   padding-left: 80px;
   padding-right: 50px;
 }
 
 .word_name {
+  margin-top: 20px;
   font-weight: 600;
 }
 
@@ -192,6 +165,8 @@ export default {
   font-size: 20px;
   display: flex;
   margin-top: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 20px;
 }
 
 .pron > div:first {
@@ -211,14 +186,23 @@ export default {
 
 .add_word {
   position: absolute;
+  display: block;
   width: 50px;
   height: 50px;
-  border: 1px rgb(0, 0, 0) dashed;
+  border: 1px rgb(0, 0, 0);
   border-style: dashed;
   border-radius: 50px;
-  top: 50%;
-  right: 50px;
-  transform: translate(0, -50%);
+  top: 100px;
+  /* left: 80%; */
+  right: 100px;
+  /* margin: 0 !important; */
+  z-index: 1;
+  /* transform: translate(-50%, -50%); */
+}
+.add_word:hover {
+  border: 1px rgb(0, 0, 0);
+  border-style: solid;
+  cursor: pointer;
 }
 
 .add_word div:nth-child(1) {
@@ -244,69 +228,14 @@ export default {
   transform: translate(-50%, -50%) rotate(90deg);
 }
 
-.defi {
-  position: relative;
-  top: 270px;
-  left: 130px;
-  width: 50%;
-  margin-right: 20px;
-  padding-bottom: 20px;
-}
-
-.defi_type {
-}
-
-.defi_type > div:first-child {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 15px;
-  font-weight: bold;
-  color: #707070;
-}
-
-.defi_type > div:nth-child(n + 2) {
-  font-size: 18px;
-  font-weight: bold;
-  padding-left: 20px;
-  padding-bottom: 10px;
-  border-left: 2px #949494 solid;
-  margin-left: 20px;
-}
-
-.defi_type > div > div {
-  padding-bottom: 5px;
-  padding-left: 10px;
-  margin-left: 20px;
-  border-left: 3px #949494 solid;
-}
-
-.defi_type > div > div:nth-child(1) {
-  margin-top: 10px;
-  font-size: 15px;
-  font-weight: 300;
-}
-
-.defi_type > div > div:nth-child(2) {
-  font-size: 13px;
-  font-weight: 300;
-}
-
-.defi_type > div:first-child {
-  padding: 5px 10px;
-  background-color: #c8c8c8;
-  display: inline-block;
-  border-radius: 40px;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.etc {
-  position: inherit;
-  right: 3%;
-  top: 5%;
-  left: 68%;
+.etcs {
+  margin-left: 5%;
+  width: 90%;
   background-color: #c8c8c8;
   border-radius: 50px;
+  padding-bottom: 20px;
+}
+.etc {
   /* border-top-left-radius: 50px;
     border-top-right-radius: 50px; */
   /* min-height: 95%; */

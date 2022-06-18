@@ -7,10 +7,11 @@
     <svg width="350" height="160">
       <ellipse cx="175" cy="85" rx="140" ry="60" />
     </svg>
-    <div>Search</div>
-    <div>My Page</div>
-    <div>Quiz</div>
-    <div>Login</div>
+    <div @click="this.$router.push('/')">Search</div>
+    <div @click="this.$router.push('/')">MyPage</div>
+    <div @click="this.$router.push('/')">Quiz</div>
+    <div @click="this.$router.push('/login')" v-show="!this.loggedIn">LogIn</div>
+    <div>{{ login }}</div>
   </div>
 </template>
 
@@ -18,6 +19,16 @@
 export default {
   name: "NavBar",
   components: {},
+  data() {
+    return {
+      login: false
+    }
+  },
+  methods: {
+  },
+  onMounted() {
+    this.login = this.$route.params.login
+  }
 };
 </script>
 
