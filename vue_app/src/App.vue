@@ -1,18 +1,19 @@
 <template>
-  <input type="checkbox" id="nav_open" v-model="open"/>
+  <input type="checkbox" id="nav_open" v-model="open" />
   <label for="nav_open">
     <img src="./assets/menu_icon.png" />
   </label>
   <div class="left_nav">
-    <svg width="350" height="160">
+    <!-- <svg width="350" height="160">
       <ellipse cx="175" cy="85" rx="140" ry="60" />
-    </svg>
-    <div @click="this.$router.push('/'); this.open = false">Search</div>
-    <div @click="toMyPage; this.open = false">MyPage</div>
-    <div @click="this.$router.push('/'); this.open = false">Quiz</div>
-    <div v-show="!login" @click="this.$router.push('/login'); this.open = false">LogIn</div>
+    </svg> -->
+    <div @click="toFirstPage">Search</div>
+    <div @click="toMyPage">MyPage</div>
+    <div @click="toQuizPage">Quiz</div>
+    <div v-show="!login" @click="toLoginPage">LogIn</div>
+    <div v-if="userName" class="userName">{{ userName }}</div>
   </div>
-  <router-view v-on:loginSuccess="reload"/>
+  <router-view v-on:loginSuccess="loginSuccess" :userName="userName"> </router-view>
 </template>
 
 <script>
@@ -29,21 +30,42 @@ export default {
     return {
       open: false,
       login: false,
-      userName: ''
+      userName: "",
     };
   },
   methods: {
-    reload(value) {
-      this.login = value;
+    loginSuccess(value) {
+      this.login = true;
+      this.userName = value;
       console.log("current status: ", value);
     },
     toMyPage() {
       if (this.login)
         this.$router.push({
-          path: "/myPage",
-          params: { userName: this.userName },
+          name: "myPage",
+          params: {
+            userName: this.userName,
+          },
         });
-      else this.$router.push("/login");
+      else this.toLoginPage();
+      this.open = false;
+    },
+    toFirstPage() {
+      this.$router.push({
+        name: "firstPage",
+        params: {
+          userName: this.userName,
+        },
+      });
+      this.open = false;
+    },
+    toLoginPage() {
+      this.$router.push("/login");
+      this.open = false;
+    },
+    toQuizPage() {
+      this.$router.push("/quiz");
+      this.open = false;
     },
   },
 };
@@ -56,8 +78,12 @@ export default {
   position: fixed;
   top: 0;
   left: -350px;
-  z-index: 1;
+  z-index: 2;
   transition: all 0.35s;
+}
+
+label {
+  z-index: 2;
 }
 
 input[id="nav_open"] {

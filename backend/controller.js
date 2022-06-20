@@ -1,6 +1,127 @@
 const crawling = require("./crawling");
 const { pool } = require("./database");
-const { selectUser } = require("./db");
+const db = require("./db");
+
+exports.deleteWordFromUser = async (req, res) => {
+  console.log("deleteWordFromUser");
+  const { word_id, userName } = req.body;
+  console.log(word_id, userName);
+  const result = await db.deleteWordById(word_id, userName);
+  if (result) {
+    console.log("delete Success");
+    res.send({
+      isSuccess: true,
+      message: "단어를 삭제하였습니다.",
+    });
+  } else {
+    res.send({
+      isSuccess: false,
+      message: "단어삭제에 실패하였습니다.",
+    });
+  }
+};
+
+exports.userWordList = async (req, res) => {
+  console.log("userWordList");
+  const userName = req.params.userName;
+  const result = await db.selectUserWordList(userName);
+  if (result) {
+    if (result == 0) {
+      res.send({
+        isSuccess: false,
+        message: "단어목록이 없습니다.",
+        result: result,
+      });
+    } else {
+      res.send({
+        isSuccess: true,
+        message: "단어목록을 불러왔습니다.",
+        result: result,
+      });
+    }
+  } else {
+    res.send({
+      isSuccess: false,
+      message: "단어목록이 없습니다.",
+    });
+  }
+};
+
+exports.addWordToMyPage = async (req, res) => {
+  console.log("addWordToMyPage");
+  const word = req.body.word;
+  const userName = req.body.userName;
+
+  const isExist = await db.searchWordInMyPage(userName, word.word);
+  console.log(isExist);
+  if (isExist.length > 0) {
+    res.send({
+      isSuccess: false,
+      message: "단어장에 이미 추가되었습니다.",
+    });
+  } else {
+    const addWord = db.insertWordInMyPage(userName, word);
+    if (!addWord) {
+      res.send({
+        isSuccess: false,
+        message: "단어장 추가를 실패하였습니다.",
+      });
+    } else {
+      console.log("success");
+      res.send({
+        isSuccess: true,
+        message: "단어장에 추가 하였습니다.",
+      });
+    }
+  }
+};
+
+exports.signUp = async (req, res) => {
+  console.log("signUp");
+  const { userName, password } = req.body;
+  const isExist = await db.selectUserByUserName(userName);
+  const tableName = userName + "_table";
+  console.log(isExist);
+  if (isExist.length > 0) {
+    res.send({ isSuccess: false, message: "아이디 중복" });
+  } else {
+    try {
+      const connection = await pool.getConnection(async (conn) => conn);
+      try {
+        const userQuery =
+          "insert into users (userName, password) values (?,?);";
+        const userParams = [userName, password];
+        const [row] = await connection.query(userQuery, userParams);
+        connection.release();
+      } catch (err) {
+        console.error(` ##### insertWord Query error ##### `);
+        console.log(err);
+        connection.release();
+      }
+    } catch (err) {
+      console.error(` ##### insertWord DB error #####`);
+    }
+
+    try {
+      const connection = await pool.getConnection(async (conn) => conn);
+      try {
+        const insertUserQuery =
+          "CREATE TABLE " +
+          tableName +
+          "(word_id int NOT NULL AUTO_INCREMENT, word varchar(45) NOT NULL, meaning varchar(1000) NOT NULL, pron varchar(45) DEFAULT NULL, types varchar(45) DEFAULT NULL, meaning_deep varchar(4000) DEFAULT NULL, meaning_deep_kr varchar(4000) DEFAULT NULL, sound_url varchar(1000) DEFAULT NULL, PRIMARY KEY (word_id),UNIQUE KEY word_id_UNIQUE (word_id));";
+        const [row] = await connection.query(insertUserQuery);
+        connection.release();
+        res.send({ isSuccess: true });
+      } catch (err) {
+        console.error(` ##### insertWord Query error ##### `);
+        console.log(err);
+        connection.release();
+      }
+    } catch (err) {
+      console.error(` ##### insertWord DB error #####`);
+    }
+  }
+};
 
 exports.searchWord = async (req, res) => {
   console.log("searchWord");
@@ -37,9 +158,9 @@ exports.searchWord = async (req, res) => {
     if (wordFromDb) {
       res.send(wordFromDb);
     } else {
-        res.send({
-            message: '단어를 검색할 수 없습니다.'
-        });
+      res.send({
+        message: "단어를 검색할 수 없습니다.",
+      });
     }
   }
 };
@@ -148,7 +269,7 @@ exports.login = async function (req, res) {
   }
 
   // 회원여부 검사
-  const isValidUser = await selectUser(userName, password);
+  const isValidUser = await db.selectUser(userName, password);
   if (!isValidUser) {
     return res.send({
       isSuccess: false,

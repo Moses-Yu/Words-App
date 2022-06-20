@@ -17,8 +17,7 @@
       </div>
 
       <div class="login_else_btn">
-        <div>SIGN IN</div>
-        <div>I FOR GOT</div>
+        <button type="button" @click="toSignUpPage">SIGN UP</button>
       </div>
     </div>
   </div>
@@ -42,19 +41,26 @@ export default {
           password: this.password,
         })
         .then((response) => {
-          console.log(response.data);
-          this.loggedIn = response.data.isSuccess;
-          console.log(this.loggedIn);
-          this.$emit("loginSuccess", response.data.isSuccess);
-          this.$router.push({
-            name: "firstPage",
-            params: { userName: this.userName },
-          });
+          if (response.data.isSuccess) {
+            this.$router.push({
+              name: "firstPage",
+              params: { userName: this.userName, loggedIn: true },
+            });
+            this.$emit("loginSuccess", this.userName);
+          } else {
+            alert("로그인 정보가 올바르지 않습니다.");
+          }
           //   this.$router.go(-1);
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    toSignUpPage() {
+      this.$router.push({
+        name: "signUp",
+      });
+      console.log("push signUp");
     },
   },
 };

@@ -1,8 +1,11 @@
 <template>
-  <div
-    :class="[isActive ? 'search_tab_top' : 'search_tab_center', 'div_box']"
-  >
-    <input v-model="searchText" class="search_input" type="text"  @keyup.enter="search"/>
+  <div :class="[isActive ? 'search_tab_top' : 'search_tab_center', 'div_box']">
+    <input
+      v-model="searchText"
+      class="search_input"
+      type="text"
+      @keyup.enter="search"
+    />
     <button class="search_submit" type="button" @click="search">
       <img src="../assets/search_icon.png" />
     </button>
@@ -50,26 +53,27 @@ export default {
 
 <style scoped>
 .div_box {
-  transition-property: left, top;
-  transition-duration: 2s, 2s;
+  transition-property: top;
+  transition-duration: 2s;
   float: left;
+  left: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
 }
 .search_tab_center {
-  left: 50%;
   top: 50%;
 }
 .search_tab_top {
-  left: 50%;
   top: 10%;
 }
 .search_input {
   border: 0;
   border: 1px #424242 solid;
   outline: none;
-  width: 80%;
+  width: 90%;
   padding-left: 20px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   font-size: 40px;
   border-radius: 100px;
 }
@@ -82,9 +86,13 @@ export default {
 }
 
 .search_submit > img {
-  margin-top: 0px;
+  margin-top: 4px;
   margin-left: 10px;
-  width: 40px;
+  width: 35px;
   height: auto;
+}
+.search_submit > img:hover {
+  cursor: pointer;
+  width: 36px;
 }
 </style>

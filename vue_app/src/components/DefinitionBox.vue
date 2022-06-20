@@ -1,6 +1,6 @@
 <template>
   <div class="def def_anim" style="">
-    <div class="add_word" v-if="word.word">
+    <div class="add_word" v-if="word.word" @click="addWordToMyPage">
       <div></div>
       <div></div>
     </div>
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import speakerImage0 from "../assets/speaker_icon.png";
 import speakerImage1 from "../assets/speaker_icon1.png";
 
@@ -59,6 +60,35 @@ export default {
       let i = document.getElementById(id);
       i.play();
     },
+    addWordToMyPage() {
+      if(this.$route.params.userName)
+      {
+        console.log("loggedIn", this.$route.params.userName);
+        axios.post("/server/addWordToMyPage", {
+          word: this.wordObject,
+          userName: this.$route.params.userName
+        })
+        .then((res) => {
+          if(res.data.isSuccess)
+          {
+            alert(res.data.message)
+          }
+          else
+          {
+            alert(res.data.message)
+          }
+
+        })
+        .catch()
+      }
+      else
+      {
+        this.$router.push({
+          name: 'login',
+        })
+      }
+    },
+
   },
   computed: {
     word: function () {

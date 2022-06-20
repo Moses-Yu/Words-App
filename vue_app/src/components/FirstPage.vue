@@ -1,4 +1,7 @@
 <template>
+  <div class="welcome" v-if="userName && !haveWord">
+    환영합니다 {{ this.$route.params.userName }}님!
+  </div>
   <search-tab v-on:result-from-searchTab="getWordFromSearchTab" />
   <definition-box v-show="haveWord" :wordObject="searchData" />
 </template>
@@ -13,10 +16,14 @@ export default {
     SearchTab,
     DefinitionBox,
   },
+  params:{
+    userName: String,
+  },
   data() {
     return {
       searchData: {},
-      haveWord: false
+      haveWord: false,
+      userName: this.$route.params.userName
     };
   },
   methods: {
@@ -32,7 +39,20 @@ export default {
   //     else return false;
   //   },
   // },
+  mounted() {
+    this.userName = this.$route.params.userName;
+    console.log(this.userName);
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.welcome {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  font-weight: bold;
+}
+</style>

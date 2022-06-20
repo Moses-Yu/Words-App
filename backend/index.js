@@ -19,8 +19,15 @@ app.get("/", (req, res) => {
 
 app.post("/server/login", controller.login);
 
+app.post("/server/signUp", controller.signUp);
+
+app.get("/server/userWords/:userName", controller.userWordList);
+
 app.get("/server/word/:word", controller.searchWord);
 
+app.post("/server/addWordToMyPage", controller.addWordToMyPage);
+
+app.delete("/server/delete", controller.deleteWordFromUser);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
