@@ -21,6 +21,7 @@ export default {
       searchText: "",
       result: {
         word_id: 0,
+        word: "",
         searched: false,
       },
     };
@@ -29,16 +30,22 @@ export default {
     search() {
       console.log(this.searchText);
       axios
-        .get("http://localhost:3001/server/word/" + this.searchText)
+        .get("/server/word/" + this.searchText)
         .then((response) => {
-          this.result = response.data;
+          const res = response.data.result;
           this.result.searched = true;
-          this.$emit("result-from-searchTab", this.result);
+
+          if (response.data.isSuccess) {
+            this.$emit("result-from-searchTab", res);
+          } else {
+            console.log(response.data.message);
+            this.$emit("result-from-searchTab", this.result);
+          }
         })
         .catch((err) => {
           this.result.searched = true;
           console.log(err);
-          this.$emit("result-from-searchTab", this.result);
+          this.$emit("result-from-searchTab", false);
         });
     },
   },

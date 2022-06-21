@@ -53,6 +53,7 @@ export default {
     return {
       speakerImage0: speakerImage0,
       speakerImage1: speakerImage1,
+      userName: this.$route.params.userName
     };
   },
   methods: {
@@ -61,12 +62,11 @@ export default {
       i.play();
     },
     addWordToMyPage() {
-      if(this.$route.params.userName)
+      if(this.userName)
       {
-        console.log("loggedIn", this.$route.params.userName);
         axios.post("/server/addWordToMyPage", {
           word: this.wordObject,
-          userName: this.$route.params.userName
+          userName: this.userName
         })
         .then((res) => {
           if(res.data.isSuccess)
@@ -83,6 +83,7 @@ export default {
       }
       else
       {
+        alert("로그인이 필요합니다.")
         this.$router.push({
           name: 'login',
         })

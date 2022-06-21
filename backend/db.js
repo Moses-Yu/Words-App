@@ -73,6 +73,28 @@ exports.selectUserWordList = async function (userName) {
   }
 };
 
+exports.wordTable = async function (userName) {
+  try {
+    const connection = await pool.getConnection(async (conn) => conn);
+
+    try {
+      const selectUserQuery = "select * from words";
+      const [row] = await connection.query(selectUserQuery);
+      connection.release();
+      return row;
+    } catch (err) {
+      console.error(` ##### wordTable Query error ##### `);
+      console.log(err);
+      connection.release();
+      return false;
+    }
+  } catch (err) {
+    console.error(` ##### wordTable DB error #####`);
+    console.log(err);
+    return false;
+  }
+};
+
 exports.selectUserByUserName = async function (userName) {
   try {
     const connection = await pool.getConnection(async (conn) => conn);

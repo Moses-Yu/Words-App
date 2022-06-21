@@ -85,7 +85,7 @@ export default {
 }
 
 .login_input > div > input {
-  border: 0;
+  border: 1px solid #535353;
   border-radius: 25px;
   height: 50px;
   width: 260px;
@@ -105,12 +105,23 @@ export default {
   font-size: 23px;
 }
 
+.login_btn > button:hover {
+  background-color: rgb(185, 185, 185);
+  cursor: pointer;
+}
+
 .login_else_btn {
   padding-top: 20px;
 }
 
-.login_else_btn > div {
+.login_else_btn > button {
   margin-bottom: 7px;
   font-size: 14px;
+  background-color: unset;
+  border: 0;
+}
+
+.login_else_btn > button:hover {
+  cursor: pointer;
 }
 </style>

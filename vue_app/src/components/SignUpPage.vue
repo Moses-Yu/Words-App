@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="login_btn">
-        <button type="button" @click="login">LOGIN</button>
+        <button type="button" @click="login">SIGN-UP</button>
       </div>
 
       <div class="login_else_btn">
@@ -79,7 +79,7 @@ export default {
 }
 
 .login_input > div > input {
-  border: 0;
+  border: 1px solid #535353;
   border-radius: 25px;
   height: 50px;
   width: 260px;
@@ -96,7 +96,12 @@ export default {
   height: 100px;
   width: 100px;
   border-radius: 50px;
-  font-size: 23px;
+  font-size: 20px;
+}
+
+.login_btn > button:hover {
+  background-color: rgb(185, 185, 185);
+  cursor: pointer;
 }
 
 .login_else_btn {

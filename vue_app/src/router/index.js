@@ -6,6 +6,9 @@ import LoginPage from '../components/LoginPage.vue'
 import MyPage from '../components/MyPage.vue'
 import QuizPage from '../components/QuizPage.vue'
 import SignUpPage from '../components/SignUpPage.vue'
+import QuizBook from '../components/QuizBook.vue'
+import WordQuiz from '../components/WordQuiz.vue'
+import ResultPage from '../components/ResultPage.vue'
 
 const routes = [
   {
@@ -32,6 +35,21 @@ const routes = [
     path: '/quiz',
     name: 'quiz',
     component: QuizPage
+  },
+  {
+    path: '/quizBook',
+    name: 'quizBook',
+    component: QuizBook
+  },
+  {
+    path: '/wordQuiz',
+    name: 'wordQuiz',
+    component: WordQuiz
+  },
+  {
+    path: '/result',
+    name: 'result',
+    component: ResultPage,
   },
 ]
 

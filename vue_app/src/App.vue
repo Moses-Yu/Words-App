@@ -13,7 +13,8 @@
     <div v-show="!login" @click="toLoginPage">LogIn</div>
     <div v-if="userName" class="userName">{{ userName }}</div>
   </div>
-  <router-view v-on:loginSuccess="loginSuccess" :userName="userName"> </router-view>
+  <router-view v-on:loginSuccess="loginSuccess" @click="open = false">
+  </router-view>
 </template>
 
 <script>
@@ -37,7 +38,6 @@ export default {
     loginSuccess(value) {
       this.login = true;
       this.userName = value;
-      console.log("current status: ", value);
     },
     toMyPage() {
       if (this.login)
@@ -47,7 +47,10 @@ export default {
             userName: this.userName,
           },
         });
-      else this.toLoginPage();
+      else {
+        alert("로그인이 필요합니다.");
+        this.toLoginPage();
+      }
       this.open = false;
     },
     toFirstPage() {
@@ -64,7 +67,12 @@ export default {
       this.open = false;
     },
     toQuizPage() {
-      this.$router.push("/quiz");
+      this.$router.push({
+        name: "quiz",
+        params: {
+          userName: this.userName,
+        },
+      });
       this.open = false;
     },
   },
@@ -80,6 +88,7 @@ export default {
   left: -350px;
   z-index: 2;
   transition: all 0.35s;
+  padding-top: 150px;
 }
 
 label {
@@ -105,6 +114,10 @@ input[id="nav_open"] + label > img {
   left: 10px;
 }
 
+input[id="nav_open"] + label > img:hover {
+  cursor: pointer;
+}
+
 input[id="nav_open"]:checked + label + div {
   left: 0;
 }
@@ -123,6 +136,11 @@ input[id="nav_open"]:checked + label {
   text-align: center;
   font-size: 48px;
   font-weight: 600;
+}
+
+.left_nav > div:hover {
+  background-color: rgb(97, 97, 97);
+  cursor: pointer;
 }
 
 .left_nav > svg > ellipse {

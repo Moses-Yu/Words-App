@@ -1,20 +1,19 @@
 <template>
   <div class="box">
-    <div class="title">{{ userName }}의 단어장</div>
+    <div class="title">Quiz Result</div>
+    <button class="replay" @click="restart">Again</button>
     <div class="list">
-      <div style="margin-bottom: 10px; font-weight: bold">단어 목록</div>
-      <div v-for="(item, index) in this.wordList" :key="index">
-        <input
+      <div style="margin-bottom: 10px; font-weight: bold">문제 목록</div>
+      <div v-for="(item, index) in questions" :key="index">
+        <button
           :id="index"
-          class="input"
-          type="radio"
+          :class="[item.correct ? 'correct' : 'wrong', 'input']"
+          type="button"
           name="word"
-          :value="index"
-          v-model="isChecked"
-        />
-        <label :for="index">
-          {{ item.word }}
-        </label>
+          @click="selectWord(item.id)"
+        >
+          {{ item.a }}
+        </button>
       </div>
     </div>
     <div class="def def_anim" style="">
@@ -26,18 +25,19 @@
           </div>
           <div class="pron">
             <div>{{ word.pron }}</div>
-            <div class="sound" @click="play(word.sound_url)">
+            <div class="sound" @click="playSound(word.sound_url)">
               <audio :id="word.sound_url" :src="word.sound_url"></audio>
               <img src="../assets/speaker_icon1.png" />
             </div>
           </div>
         </div>
       </div>
-      <div class="add_word" v-if="word.word" @click="deleteWord">
-        <img src="../assets/trash_can.png" />
+      <div class="add_word" v-if="word.word" @click="addWordToMyPage">
+        <div></div>
+        <div></div>
       </div>
       <div class="err" v-else>Can not search word</div>
-      <div class="etcs" v-if="word.word">
+      <div class="etcs" v-if="word.meaning_deep">
         <div class="etc">
           <div class="etc_title">예문</div>
 
@@ -64,88 +64,111 @@
 <script>
 import axios from "axios";
 export default {
-  name: "MyPage",
+  name: "ResultPage",
   components: {},
   data() {
     return {
       userName: this.$route.params.userName,
+      selectBook: this.$route.params.selectBook,
+      questions: [],
       wordList: [],
       isChecked: 0,
+      word: {},
     };
   },
+  mounted() {
+    this.wordList = JSON.parse(this.$route.params.wordList);
+    this.questions = JSON.parse(this.$route.params.questions);
+    for (let i = 0; i < this.questions.length; i++) {
+      if (!this.questions[i].correct) {
+        this.selectWord(this.questions[i].id);
+        break;
+      }
+      if (i == this.questions.length - 1) {
+        this.selectWordWord(this.questions[0].id);
+      }
+    }
+  },
   methods: {
+    playSound(id) {
+      let i = document.getElementById(id);
+      i.play();
+    },
+    restart() {
+      this.$router.push({
+        name: "wordQuiz",
+        params: {
+          userName: this.userName,
+          selectBook: this.selectBook,
+        },
+      });
+    },
+    selectWord(id) {
+      let temp = this.wordList[id];
+      if (temp.meaning_deep) {
+        let s = temp.meaning_deep;
+        let md = s.split("@@@");
+        s = temp.meaning_deep_kr;
+        let mdk = s.split("@@@");
+        temp.md = md;
+        temp.mdk = mdk;
+      }
+      this.word = temp;
+    },
     play(id) {
       let i = document.getElementById(id);
       i.play();
     },
-    getWordList() {
-      axios
-        .get("/server/userWords/" + this.$route.params.userName)
-        .then((res) => {
-          this.wordList = res.data.result;
-          console.log(this.wordList);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    reload() {
-      this.getWordList();
-    },
-    deleteWord() {
-      console.log(this.isChecked, this.wordList[this.isChecked].word_id);
-      const id = this.wordList[this.isChecked].word_id;
-      axios
-        .delete("/server/delete", {
-          data: {
-            word_id: id,
+    addWordToMyPage() {
+      if (this.userName) {
+        axios
+          .post("/server/addWordToMyPage", {
+            word: this.word,
             userName: this.userName,
-          },
-        })
-        .then((res) => {
-          if (res.data.isSuccess) {
-            // alert(res.data.message);
-          } else {
-            alert(res.data.message);
-          }
-          this.reload();
-          this.isChecked = 0;
-        })
-        .catch();
-    },
-  },
-  computed: {
-    word: function () {
-      if (this.wordList.length > 0) {
-        let temp = this.wordList[this.isChecked];
-        if (temp.word) {
-          let s = temp.meaning_deep;
-          let md = s.split("@@@");
-          s = temp.meaning_deep_kr;
-          let mdk = s.split("@@@");
-          temp.md = md;
-          temp.mdk = mdk;
-        }
-        return temp;
+          })
+          .then((res) => {
+            if (res.data.isSuccess) {
+              alert(res.data.message);
+            } else {
+              alert(res.data.message);
+            }
+          })
+          .catch();
+      } else {
+        alert("로그인이 필요합니다.");
+        this.$router.push({
+          name: "login",
+        });
       }
-      return [];
     },
-  },
-  mounted() {
-    if (this.userName) this.reload();
-    else this.$router.push("/login");
   },
 };
 </script>
 
 <style scoped>
+.replay {
+  position: fixed;
+  width: 100px;
+  padding: 5px;
+  left: 60px;
+  top: 140px;
+  font-size: 25px;
+  background-color: #dcdcdc;
+  border: 1px #424242 solid;
+}
+.correct {
+  background-color: #56bd5e;
+}
+.wrong {
+  background-color: #cc4949;
+}
 .box {
   overflow-y: hidden;
   font-size: 20px;
 }
 .title {
   position: absolute;
-  top: 80px;
+  top: 100px;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 50px;
@@ -156,7 +179,7 @@ input {
   display: none;
 }
 
-label {
+button {
   display: inline-block;
   background-color: #c8c8c8;
   width: 90%;
@@ -166,10 +189,7 @@ label {
   padding-top: 2px;
   padding-bottom: 5px;
   font-size: 20px;
-}
-label:hover{
-  background-color: #a7a7a7;
-  cursor: pointer;
+  border: 0;
 }
 
 /* label.checked {
@@ -177,7 +197,7 @@ label:hover{
 } */
 
 input[type="radio"]:checked + label {
-  background-color: #8f8f8f;
+  background-color: #7a7a7a;
 }
 
 .list {
@@ -305,18 +325,6 @@ input[type="radio"]:checked + label {
   width: auto;
 }
 
-.add_word > img {
-  position: absolute;
-  display: block;
-  width: 50px;
-  height: 50px;
-  top: 120px;
-  right: 100px;
-}
-.add_word:hover {
-  cursor: pointer;
-}
-
 .etcs {
   width: auto;
   background-color: #c8c8c8;
@@ -397,5 +405,53 @@ input[type="radio"]:checked + label {
   top: 4px;
   display: inline-block;
   position: relative;
+}
+.add_word {
+  position: absolute;
+  display: block;
+  width: 50px;
+  height: 50px;
+  border: 1px rgb(0, 0, 0);
+  border-style: dashed;
+  border-radius: 50px;
+  top: 100px;
+  /* left: 80%; */
+  right: 100px;
+  /* margin: 0 !important; */
+  z-index: 1;
+  /* transform: translate(-50%, -50%); */
+}
+.add_word:hover {
+  border: 1px rgb(0, 0, 0);
+  border-style: solid;
+  cursor: pointer;
+}
+
+.add_word div:nth-child(1) {
+  position: absolute;
+  width: 30px;
+  height: 5px;
+  left: 51%;
+  top: 51%;
+  transform: translate(-50%, -50%);
+  background-color: black;
+  border-radius: 10px;
+}
+
+.add_word div:nth-child(2) {
+  position: absolute;
+  display: block;
+  width: 30px;
+  height: 5px;
+  background-color: black;
+  border-radius: 10px;
+  left: 51%;
+  top: 51%;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: #979797;
 }
 </style>

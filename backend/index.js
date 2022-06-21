@@ -25,6 +25,8 @@ app.get("/server/userWords/:userName", controller.userWordList);
 
 app.get("/server/word/:word", controller.searchWord);
 
+app.get("/server/wordlist", controller.wordTableList);
+
 app.post("/server/addWordToMyPage", controller.addWordToMyPage);
 
 app.delete("/server/delete", controller.deleteWordFromUser);

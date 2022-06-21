@@ -4,6 +4,15 @@ const cheerio = require("cheerio");
 
 const getHtml = async (keyword) => {
   try {
+    return await axios.get(
+      `https://dic.daum.net/search.do?q=${keyword}&dic=eng`
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+const getHtml2 = async (keyword) => {
+  try {
     return await axios.get(`https://dic.daum.net/search.do?q=${keyword}`);
   } catch (err) {
     console.log(err);
@@ -23,50 +32,58 @@ exports.getWordFromHtml = async (keyword) => {
   //   console.log(html);
   const $ = cheerio.load(html.data);
   //   console.log($.html());
-  const id = $(".tit_cleansch > a").attr("href");
-  // console.log(id);
+  var id = $(".tit_cleansch > a").attr("href");
+  console.log(id);
+  if (id == undefined) {
+    console.log("id is undefined 1");
+    const html1 = await getHtml2(keyword);
+    // console.log("html1", html1)
+    const $2 = await cheerio.load(html1.data);
+    id = $2(".tit_cleansch > a").attr("href");
+    console.log(id);
+  }
 
   if (id == undefined) {
-    console.log("id is undefined");
+    console.log("id is undefined 2");
     return false;
-  } else {
-    const html1 = await getHtml1(id);
-    const $1 = cheerio.load(html1.data);
-
-    let word = {
-      word: keyword,
-      meaning: "",
-      types: "",
-      meaning_deep: "",
-      meaning_deep_kr: "",
-      pron: "",
-      sound_url: "",
-    };
-
-    let i = 1;
-    $1(".txt_mean").each((idx, node) => {
-      word.meaning = word.meaning + ` ${i++}. ` + $(node).text();
-    });
-    word.meaning = word.meaning.trim();
-    i = 1;
-
-    word.pron = word.pron + $1(".txt_pronounce:eq(0)").text();
-    word.sound_url = $1(".listen_voice:eq(0) > a").attr("href");
-
-    let s = "";
-    i = 0;
-    $1(".txt_ex").each((idx, node) => {
-      s = $(node).text();
-      s = s + `@@@`;
-      if(i++ % 2 == 0)
-        word.meaning_deep = word.meaning_deep + s;
-      else
-        word.meaning_deep_kr = word.meaning_deep_kr + s;
-    });
-
-    console.log(word);
-    return word;
   }
+
+  const html1 = await getHtml1(id);
+  const $1 = cheerio.load(html1.data);
+
+  let word = {
+    word: "",
+    meaning: "",
+    types: "",
+    meaning_deep: "",
+    meaning_deep_kr: "",
+    pron: "",
+    sound_url: "",
+  };
+
+  word.word = $1(".txt_cleanword").text();
+
+  let i = 1;
+  $1(".txt_mean").each((idx, node) => {
+    word.meaning = word.meaning + ` ${i++}. ` + $(node).text();
+  });
+  word.meaning = word.meaning.trim();
+  i = 1;
+
+  word.pron = word.pron + $1(".txt_pronounce:eq(0)").text();
+  word.sound_url = $1(".listen_voice:eq(0) > a").attr("href");
+
+  let s = "";
+  i = 0;
+  $1(".txt_ex").each((idx, node) => {
+    s = $(node).text();
+    s = s + `@@@`;
+    if (i++ % 2 == 0) word.meaning_deep = word.meaning_deep + s;
+    else word.meaning_deep_kr = word.meaning_deep_kr + s;
+  });
+
+  console.log(word);
+  return word;
 
   // const searchAndAddWord = async (keyword) => {
   //   let existing = false;

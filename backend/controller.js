@@ -47,6 +47,32 @@ exports.userWordList = async (req, res) => {
   }
 };
 
+exports.wordTableList = async (req, res) => {
+  console.log("wordTableList");
+  const userName = req.params.userName;
+  const result = await db.wordTable(userName);
+  if (result) {
+    if (result == 0) {
+      res.send({
+        isSuccess: false,
+        message: "단어목록이 없습니다.",
+        result: result,
+      });
+    } else {
+      res.send({
+        isSuccess: true,
+        message: "단어목록을 불러왔습니다.",
+        result: result,
+      });
+    }
+  } else {
+    res.send({
+      isSuccess: false,
+      message: "단어목록이 없습니다.",
+    });
+  }
+};
+
 exports.addWordToMyPage = async (req, res) => {
   console.log("addWordToMyPage");
   const word = req.body.word;
@@ -152,13 +178,22 @@ exports.searchWord = async (req, res) => {
   }
 
   if (word) {
-    res.send(word);
+    res.send({ 
+      result: word,
+      isSuccess:true,
+      message: "db에서 단어 검색 성공"
+    });
   } else {
     const wordFromDb = await crawling.getWordFromHtml(keyword);
     if (wordFromDb) {
-      res.send(wordFromDb);
+      res.send({
+        isSuccess: true,
+        result: wordFromDb,
+        message: "단어 검색 성공",
+      });
     } else {
       res.send({
+        isSuccess: false,
         message: "단어를 검색할 수 없습니다.",
       });
     }
