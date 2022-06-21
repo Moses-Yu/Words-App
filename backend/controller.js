@@ -8,7 +8,7 @@ exports.deleteWordFromUser = async (req, res) => {
   console.log(word_id, userName);
   const result = await db.deleteWordById(word_id, userName);
   if (result) {
-    console.log("delete Success");
+    // console.log("delete Success");
     res.send({
       isSuccess: true,
       message: "단어를 삭제하였습니다.",
@@ -79,7 +79,7 @@ exports.addWordToMyPage = async (req, res) => {
   const userName = req.body.userName;
 
   const isExist = await db.searchWordInMyPage(userName, word.word);
-  console.log(isExist);
+  // console.log(isExist);
   if (isExist.length > 0) {
     res.send({
       isSuccess: false,
@@ -93,7 +93,7 @@ exports.addWordToMyPage = async (req, res) => {
         message: "단어장 추가를 실패하였습니다.",
       });
     } else {
-      console.log("success");
+      // console.log("success");
       res.send({
         isSuccess: true,
         message: "단어장에 추가 하였습니다.",
