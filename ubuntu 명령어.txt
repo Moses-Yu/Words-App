@@ -12,7 +12,7 @@ $ scp -i ~/Documents/카카오톡\ 받은\ 파일/ssh-key-2022-06-16.key [filena
 $ ssh -i ~/Documents/카카오톡\ 받은\ 파일/ssh-key-2022-06-16.key ubuntu@132.226.174.46
 
 sudo rm -r /var/www/backend
-ar xvzf backend_05.tgz
+tar xvzf backend_05.tgz
 sudo mv backend /var/www/
 cd /var/www/backend
 npm i
