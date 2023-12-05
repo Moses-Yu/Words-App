@@ -7,8 +7,9 @@ sudo iptables -I INPUT 5 -i ens3 -p tcp --dport 443 -m state --state NEW,ESTABLI
 
 sudo iptables -I INPUT 5 -i ens3 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
 
-$ scp -i ~/Documents/카카오톡\ 받은\ 파일/ssh-key-2022-06-16.key [filename] ubuntu@
-132.226.174.46:~
+$ scp -i ~/Documents/카카오톡\ 받은\ 파일/ssh-key-2022-06-16.key [filename] ubuntu@132.226.174.46:~
+
+$ ssh -i ~/Documents/카카오톡\ 받은\ 파일/ssh-key-2022-06-16.key ubuntu@132.226.174.46
 
 sudo rm -r /var/www/backend
 ar xvzf backend_05.tgz
